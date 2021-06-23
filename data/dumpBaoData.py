@@ -40,7 +40,6 @@ def getObjList():
 
     return objList
 
-
 def dumpToDataBase():
     with open(sys.path[1].replace('\\', '/') + '/data/mysql.json', 'r') as f:
         data = json.load(f)
@@ -57,11 +56,13 @@ def dumpToDataBase():
     mycur = mydb.cursor()
     # conn = create_engine('mysql+pymysql://'+user+':'+passwd+'@'+host+'/'+database, encoding='utf8')
     objList = getObjList()
-
     for i in objList:
+
         s_open = i.data[0][3]
+
         for d in i.data:
-            d[1] = datetime.strptime(d[1], "%Y%m%d%H%M%S000")
+
+            d[1] = datetime(int(d[1][0:4]),int(d[1][4:6]),int(d[1][6:8]),int(d[1][8:10]),int(d[1][10:12]))
             d[1] = d[1].strftime('%Y-%m-%d-%H:%M:%S')
 
             # sql = 'insert into stock_data values (' + 'null,' + "'" + str(d[0]) + "','" + str(d[1])+"','"+str(d[2])+ "'," + str(d[3]).replace("'", '') + ',' + str(d[4]).replace("'", '') + ',' + str(d[5]).replace(
@@ -70,8 +71,9 @@ def dumpToDataBase():
             sql = "insert into stock_data values (null,'%s','%s','%s',%f,%f,%f,%f,%f,%f,%f,%f)" % (
             str(d[0]), str(d[1]), str(d[2]), float(d[3]), float(d[4]), float(d[5]), float(d[6]), float(d[7]), float(d[8]),
             float(d[3]), float((float(d[4]) + float(d[5])) /2/float(s_open)))
-            # print(sql)
+            print(sql)
             mycur.execute(sql)
+
     mydb.commit()
     mycur.close()
     mydb.close()

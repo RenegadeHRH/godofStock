@@ -35,7 +35,7 @@ def SQLexecutor(sql: str):
     mydb.close()
 
 
-def connDefault(func, *args):
+def connDefault(func, *args,**kwargs):
     """
     作为装饰器使用,让函数自动连接,加了这个装饰器后,函数形参要有mysql.connect()返回的对象(mydb)
     :param func: 需要连接数据库的函数,处理好数据之后返回,func传入的第一个数据必须是mysql.connect()返回的对象
@@ -43,15 +43,19 @@ def connDefault(func, *args):
     :return: 由func决定
     """
 
-    mydatabase = connector()
 
-    def wrapper(*args):
-        nonlocal mydatabase
-        result=func(mydatabase,*args)
+    def wrapper(*args,**kwargs):
+        mydatabase = connector()
+        # print('数据库连接')
+        #
+        # print('数据库连接状态:%s'%str(mydatabase.is_connected()))
+        result=func(mydatabase,*args,**kwargs)
         try:
             mydatabase.close()
+            # print('数据库连接关闭')
         except Exception as e :
-            pass
+            print(mydatabase.connect())
+            print('数据库关闭失败')
         return result
     #哪怕把代码写在这里,它也是比wrapper先执行
 

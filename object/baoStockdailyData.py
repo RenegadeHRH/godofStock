@@ -8,13 +8,13 @@ class baoStockDailyData:
         self.code=code
         self.fetchData()
 
-    def fetchData(self):
+    def fetchData(self,delta=1):
 
         bs.login()
 
         rs = bs.query_history_k_data_plus(self.code,
                                           "date,time,code,open,high,low,close,volume,amount,adjustflag",
-                                          start_date=str(datetime.date.today() - datetime.timedelta(days=1)),
+                                          start_date=str(datetime.date.today() - datetime.timedelta(days=delta)),
                                           frequency="5", adjustflag="3")
 
         data_list=[]
