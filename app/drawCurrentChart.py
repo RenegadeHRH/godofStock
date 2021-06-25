@@ -123,4 +123,4 @@ if __name__ == '__main__':
     # data=getDataFromDataBase('sz.002273')
 
     # drawOne(getDataFromDataBase('sz.002273',date=datetime.date.today()- datetime.timedelta(days=1)), '水晶光电')
-    drawMulti(fetchStockList(),date=datetime.date.today()- datetime.timedelta(days=1),choice=[3,2,5])
+    drawMulti(fetchStockList(),date=datetime.date.today()- datetime.timedelta(days=2),choice=[3,2,5])
